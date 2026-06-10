@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devbhoomi — Uttarakhand Travel Planner</title>
+  <meta name="description" content="AI-powered travel assistant for Uttarakhand. Get personalised itineraries, pricing, and travel tips for Char Dham, Rishikesh, Nainital, Auli and more.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-avatar">🏔️</div>
+    <div>
+      <div class="header-title">Devbhoomi</div>
+      <div class="header-sub">Uttarakhand Travel Planner · Land of the Gods</div>
+    </div>
+    <div class="header-badge">Powered by Groq AI</div>
+  </header>
+
+  <!-- Main body -->
+  <div class="app-body">
+
+    <!-- Chat panel -->
+    <div class="chat-panel">
+
+      <!-- Messages -->
+      <div class="messages-area" id="messages-area">
+
+        <!-- Welcome message -->
+        <div class="message bot">
+          <div class="message-avatar">🏔️</div>
+          <div class="bubble">
+            <strong>Namaste! I'm Devbhoomi 🙏</strong>
+            <p>Your personal guide to <em>Devbhoomi</em> — the Land of the Gods. I can help you plan the perfect Uttarakhand trip:</p>
+            <ul>
+              <li>🛕 Char Dham Yatra itineraries</li>
+              <li>🏄 Rishikesh adventure packages</li>
+              <li>🌸 Valley of Flowers trekking</li>
+              <li>⛷️ Auli ski holidays</li>
+              <li>🐯 Jim Corbett wildlife safaris</li>
+              <li>🏔️ Kedarnath, Badrinath pilgrimages</li>
+            </ul>
+            <p>Tell me where you want to go, your travel dates, and I'll build a complete day-by-day itinerary with real costs and transport options. <strong>Or use the panel on the right to fill in your details.</strong></p>
+          </div>
+        </div>
+
+      </div><!-- /messages-area -->
+
+      <!-- Suggestion chips -->
+      <div id="suggestions" class="suggestions"></div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer">
+        All pricing is approximate. Book via uttarakhandtourism.gov.in · gmvnl.com · irctc.co.in only.
+      </div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <div class="input-row">
+          <textarea
+            id="input-box"
+            class="input-box"
+            rows="1"
+            placeholder="Ask about any Uttarakhand destination…"
+            aria-label="Chat message"
+          ></textarea>
+          <button id="send-btn" class="send-btn" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /chat-panel -->
+
+    <!-- Context / form panel -->
+    <aside class="context-panel">
+
+      <div class="context-panel-header">
+        <span>✏️</span> Plan my trip
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="source-city">Travelling from</label>
+        <input type="text" id="source-city" class="form-input" placeholder="e.g. Delhi, Mumbai" list="source-cities">
+        <datalist id="source-cities">
+          <option value="Delhi">
+          <option value="Mumbai">
+          <option value="Kolkata">
+          <option value="Bangalore">
+          <option value="Hyderabad">
+          <option value="Pune">
+          <option value="Chennai">
+          <option value="Ahmedabad">
+          <option value="Chandigarh">
+          <option value="Lucknow">
+          <option value="Jaipur">
+          <option value="Dehradun">
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="dest-input">Destination in Uttarakhand</label>
+        <input type="text" id="dest-input" class="form-input" placeholder="e.g. Rishikesh, Char Dham" list="destinations">
+        <datalist id="destinations">
+          <option value="Rishikesh">
+          <option value="Haridwar">
+          <option value="Mussoorie">
+          <option value="Nainital">
+          <option value="Dehradun">
+          <option value="Auli">
+          <option value="Kedarnath">
+          <option value="Badrinath">
+          <option value="Gangotri">
+          <option value="Yamunotri">
+          <option value="Valley of Flowers">
+          <option value="Jim Corbett">
+          <option value="Chopta">
+          <option value="Lansdowne">
+          <option value="Char Dham">
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="start-date">From date</label>
+        <input type="date" id="start-date" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="end-date">To date</label>
+        <input type="date" id="end-date" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="group-size">Group size</label>
+        <select id="group-size" class="form-select">
+          <option value="1">Solo traveller</option>
+          <option value="2" selected>2 people</option>
+          <option value="3">3 people</option>
+          <option value="4">4 people</option>
+          <option value="6">6 people</option>
+          <option value="10">10+ people / group</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="budget">Budget level</label>
+        <select id="budget" class="form-select">
+          <option value="budget">Budget (₹500–1,500/night)</option>
+          <option value="mid-range" selected>Mid-range (₹2,000–5,000/night)</option>
+          <option value="luxury">Luxury (₹5,000+/night)</option>
+        </select>
+      </div>
+
+      <button id="plan-btn" class="plan-btn">🗺️ Build my itinerary</button>
+
+      <!-- Live weather widget -->
+      <div id="weather-widget" class="weather-widget">
+        <div class="weather-widget-title">Rishikesh right now</div>
+        <div class="weather-main">—°C</div>
+        <div class="weather-desc">Fetching weather…</div>
+      </div>
+
+      <!-- Popular packages -->
+      <div class="popular-section">
+        <div class="popular-title">Popular packages</div>
+
+        <div class="popular-item" data-pkg="char_dham">
+          <span class="popular-item-icon">🛕</span>
+          <div>
+            <div class="popular-item-name">Char Dham Yatra</div>
+            <div class="popular-item-days">12 days · May–Oct</div>
+          </div>
+        </div>
+
+        <div class="popular-item" data-pkg="rishikesh">
+          <span class="popular-item-icon">🏄</span>
+          <div>
+            <div class="popular-item-name">Rishikesh Adventure</div>
+            <div class="popular-item-days">3 days · Sep–May</div>
+          </div>
+        </div>
+
+        <div class="popular-item" data-pkg="nainital">
+          <span class="popular-item-icon">🏔️</span>
+          <div>
+            <div class="popular-item-name">Nainital + Corbett</div>
+            <div class="popular-item-days">5 days · Oct–May</div>
+          </div>
+        </div>
+
+        <div class="popular-item" data-pkg="valley">
+          <span class="popular-item-icon">🌸</span>
+          <div>
+            <div class="popular-item-name">Valley of Flowers</div>
+            <div class="popular-item-days">6 days · Jul–Sep</div>
+          </div>
+        </div>
+
+        <div class="popular-item" data-pkg="auli">
+          <span class="popular-item-icon">⛷️</span>
+          <div>
+            <div class="popular-item-name">Auli Ski Holiday</div>
+            <div class="popular-item-days">4 days · Jan–Mar</div>
+          </div>
+        </div>
+
+        <div class="popular-item" data-pkg="mussoorie">
+          <span class="popular-item-icon">🌿</span>
+          <div>
+            <div class="popular-item-name">Mussoorie Escape</div>
+            <div class="popular-item-days">3 days · Mar–Nov</div>
+          </div>
+        </div>
+
+      </div><!-- /popular-section -->
+
+    </aside><!-- /context-panel -->
+
+  </div><!-- /app-body -->
+
+  <script src="js/app.js"></script>
+</body>
+</html>
